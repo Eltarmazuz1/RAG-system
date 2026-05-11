@@ -81,25 +81,6 @@ async def run_agent_with_history(history: list[ChatMessage]) -> AsyncIterator[st
         return
 
     last_user_msg = history[-1].content
-    # Previous messages could be passed as message history if supported
-    # For this task, we will try to pass prev messages if the library allows,
-    # or just rely on the system prompt and tool. 
-    
-    # NOTE: As of early PydanticAI, managing full history externally can be tricky 
-    # without a specific 'messages' argument. We will assume a standard `.run_stream` usage.
-    
-    # We need to install the actual pydantic-ai optimized adapter if we want it to work perfectly
-    # with `openai` or others. For now, we will assume the `Agent` class handles it.
-    
-    # However, the USER requirement said: 
-    # "5. LLM provider wrapper (chat model) ... A function you can call from anywhere to get a streaming LLM response."
-    # AND "6. PydanticAI agent & search_docs tool"
-    # AND "Run the agent and stream back".
-    
-    # If using PydanticAI, we don't necessarily use our `LLMProvider.stream_chat` directly 
-    # unless we wire PydanticAI to use OUR provider.
-    # The instructions imply using PydanticAI *to* call the model.
-    # So we'll use `agent.run_stream(last_user_msg)`.
     
     try:
         # Convert ChatMessage history to PydanticAI messages if possible, 
