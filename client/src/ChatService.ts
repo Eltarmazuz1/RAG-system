@@ -7,19 +7,6 @@ export class ChatService {
         const params = new URLSearchParams({ session_id: sessionId, question });
         const url = `${this.API_BASE}/chat/stream?${params.toString()}`;
 
-        // We need to pass the API Token. EventSource doesn't support headers easily.
-        // Standard workaround is sending token in query param or using fetch with ReadableStream.
-        // The user requirement said: "FastAPI Auth Middleware check ... in a header, e.g. X-API-TOKEN".
-        // AND "Consumes SSE (Server-Sent Events)".
-        // Native EventSource does NOT support custom headers.
-        // OPTIONS:
-        // 1. Polyfill EventSource (e.g. `event-source-polyfill`).
-        // 2. Use `fetch` and read the stream manually.
-        // 3. Relax auth for `/chat/stream`? No, "Enforce for: /api/chat/*".
-
-        // I will implement using `fetch` with ReadableStream to support headers.
-        // This is more modern and robust than EventSource polyfills for this simple case.
-
         const controller = new AbortController();
 
         (async () => {
